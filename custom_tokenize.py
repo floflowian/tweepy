@@ -39,3 +39,17 @@ def preprocess(s, lowercase=False):
     if lowercase:
         tokens = [token if emoticon_re.search(token) else token.lower() for token in tokens]
     return tokens
+    
+    
+def update_occurence_matrix(matrix, terms):
+    for i in range(len(terms)-1):
+            for j in range(i+1, len(terms)):
+                w1, w2 = sorted([terms[i], terms[j]])
+                if w1 != w2:
+                    matrix[w1][w2] += 1
+                    
+def create_probability_matrix(p_t,p_t_coms,c_matrix,count_all,n_docs):                    
+    for term, n in count_all.items():
+            p_t[term] = n/n_docs
+            for t2 in c_matrix[term]:
+                p_t_com[term][t2] = float(c_matrix[term][t2]) / float(n_docs)
